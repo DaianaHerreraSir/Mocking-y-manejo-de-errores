@@ -1,5 +1,8 @@
 
 
+import { CustomError } from "../Errors/CustomError.js"
+import { EErrorrs } from "../Errors/enums.js"
+import { generateUserErrorInfo } from "../Errors/info.js"
 import { UserDto } from "../dto/userDto.js"
 import userService from "../repository/index.repository.js"
 
@@ -35,10 +38,22 @@ export class UserControllers{
 }
 
 //Crea un usuario
-createUser = async (req, res)=>{
+createUser = async (req, res, next)=>{
     try {
         const{first_name, last_name, email, password}= req.body
         
+        if(!first_name || !last_name || !email){
+            CustomError.createError({
+                name: "User creation error",
+                cause: generateUserErrorInfo({
+                    first_name,
+                    last_name,
+                    email
+                }),
+                message: "Error creating a user",
+                code: EErrorrs.INVALID_TYPE_ERROR
+            })
+        }
         const userNew = new UserDto({
             first_name,
             last_name,
@@ -52,7 +67,7 @@ createUser = async (req, res)=>{
             usersCreate: result
         })
     } catch (error) {
-        res.send({status: "error", message: error})
+      next (error)
     }
 }
 

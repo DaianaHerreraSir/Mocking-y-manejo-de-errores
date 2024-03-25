@@ -25,6 +25,8 @@ import ProductsManagerMongo from "./daos/Mongo/ProductsDaoMongo.js";
 import emailRouter from "./routes/email.router.js";
 import router from "./routes/userFaker.router.js";
 import userFakeRouter from "./routes/userFaker.router.js";
+import { handleErrors } from "./middleware/errors/index.js";
+import { userRouter } from "./routes/user.router.js";
 
 
 
@@ -75,12 +77,15 @@ app.post("/file",uploader.single("myFile"),(req,res) =>{
 app.use("/", viewRouter)
 app.use("/api/products",productsRouter);
 app.use("/api/carts", cartsRouter )
+app.use("/api/users", userRouter)
 app.use("/carts",cartsRouter)
 app.use("/chat/message", messagesRouter)
 app.use("/cookie", cookiesRouter)
 app.use("/api/session", sessionRouter)
 app.use("/api/email", emailRouter)
 app.use("/api", userFakeRouter)
+
+app.use(handleErrors)
 
 //productos actualizado en tiempo real
 

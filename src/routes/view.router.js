@@ -7,11 +7,15 @@ const viewRouter = Router();
 const{  getViewProduct,
         viewLogin,
         viewRegister,
-        viewPurchase} = new ViewControllers()
+        viewPurchase,
+        mockingProducts }= new ViewControllers()
 
 
 
 viewRouter.get("/products",getViewProduct);
+
+viewRouter.get("/mockingproducts", mockingProducts);
+
 
 viewRouter.get("/login",viewLogin )
 

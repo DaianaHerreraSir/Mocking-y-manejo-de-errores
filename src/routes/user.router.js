@@ -1,10 +1,7 @@
 import { Router } from "express";
-import usersModel from "../models/users.model.js";
-import passportCall from "../middleware/passportCall.js";
-import authorization from "../middleware/authentication.middleware.js";
 import { UserControllers } from "../controllers/user.controllers.js";
 
-const userRouter = Router()
+export const userRouter = Router()
 
  
 const { getUsers,

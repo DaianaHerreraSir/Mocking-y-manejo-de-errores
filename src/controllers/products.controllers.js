@@ -1,4 +1,7 @@
 
+import { CustomError } from "../Errors/CustomError.js";
+import { EErrorrs } from "../Errors/enums.js";
+import { generateProductErrorInfo } from "../Errors/info.js";
 import { ProductDao } from "../daos/factory.js";
 
 
@@ -62,30 +65,47 @@ export class ProductControllers{
     }
 
 //CREAR UN PRODUCTO
-    createProduct =  async (req, res) => {
+createProduct = async (req, res, next) => {
+    try {
+        const { title, description, price, thumbnail, code, stock, status = true, category } = req.body;
 
-        const { title, description, price, thumbnail, code, stock, status = true, category } = req.body[0];
-        
+        // Verificar si algún campo es nulo o indefinido
+        if (!title || !description || !price || !thumbnail || !code || !stock || !category) {
+            CustomError.createError({
+                name: "Products creation error",
+                cause: generateProductErrorInfo({
+                    title,
+                    description,
+                    price,
+                    thumbnail,
+                    code,
+                    stock,
+                    status,
+                    category
+                }),
+                message: "Error creating a product",
+                code: EErrorrs.INVALID_TYPE_ERROR
+            });
+        }
+
         const productNew = {
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock,
-        status,
-        category,
+            title,
+            description,
+            price,
+            thumbnail,
+            code,
+            stock,
+            status,
+            category,
         };
 
-        try {
         const createdProduct = await this.productService.createProduct(productNew);
-        res.send({ success: true, message: 'Producto creado exitosamente', product: createdProduct });
-        } 
-        catch (error) {
-        console.log(error);
-        res.status(500).send("Error interno del servidor");
-        }
+        res.status(200).json({ success: true, message: 'Producto creado exitosamente', product: createdProduct });
+    } catch (error) {
+        next(error);
     }
+}
+
 
 //ACTUALIZAR UN PRODUCTO
     updateProduct =async (req, res) => {

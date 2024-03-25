@@ -7,7 +7,27 @@ Content-Type: application/json
     "email":"daiu@gmail.com", 
 "password": "3234"
 }
+###
+//CREAR UN USUARIO
+POST http://localhost:8083/api/users
+Content-Type: application/json
 
+{    
+    "first_name": "mariana",
+    "last_name": "arco",
+    
+    "password": "1234"
+}
+
+###
+//CREAR UN PRODUCTO
+
+POST http://localhost:8083/api/products
+Content-Type: application/json
+
+{
+    "title": "BOTAS NEGRAS ALTAS"
+}
 
 ###
 

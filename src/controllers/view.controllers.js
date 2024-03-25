@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import ProductsManagerMongo from "../daos/Mongo/ProductsDaoMongo.js";
 import UserDaoMongo from "../daos/Mongo/UserDaoMongo.js";
 
@@ -46,7 +47,6 @@ getViewProduct =  async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        
         res.render("products", {
             status: "error",
             payload: {
@@ -54,6 +54,28 @@ getViewProduct =  async (req, res) => {
             }
         });
     }}
+generateProducts = () => {
+        return {
+            id: faker.database.mongodbObjectId(),
+            title: faker.commerce.productName(),
+            description: faker.commerce.productDescription(),
+            thumbnail: faker.image.url(),
+            category: faker.commerce.department(),
+            price: faker.commerce.price(),
+        };
+    };
+    
+mockingProducts = async (req, res) => {
+        let products = [];
+        for (let i = 0; i < 100; i++) {
+            products.push(this.generateProducts());
+        }
+        
+        res.send({
+            status: "",
+            payload: products
+        });
+    };
 
 viewLogin = (req, res) =>{
     res.render("login")
